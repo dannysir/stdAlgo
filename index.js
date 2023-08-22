@@ -1,29 +1,35 @@
 let fs = require("fs");
 let input = fs.readFileSync("./input.text").toString().trim().split("\n");
-const lev = +input[0]
-const trees = input[1].split(' ').map(Number);
-const answer = [];
+//let input = require("fs").readFileSync("/dev/stdin").toString().trim().split("\n");
 
-//아래와 같이 배열을 생성할 경우 fill을 통해 빈 배열을 참조하기 때문에 하나의 배열에 push를 하면 모든 배열에 추가된다. !!!!!!!
-//const ans = new Array(lev).fill([ ]);
-for (let i = 0; i < lev; i++) {
-    answer.push([]);
+let N = input.shift();
+let conntection = input.shift();
+let tree = new Array(parseInt(N)).fill( ).map(_ => []);
+for (let i = 0; i < input.length; i++) {
+    let a = input[i].split(' ');
+    tree[a[0] - 1].push(a[1]);
+    tree[a[1] - 1].push(a[0]);
+
 }
+tree.forEach(v => v.sort((a, b) => a - b));
+let visited = new Array(parseInt(N)).fill(false);
+let count = 0;
+function BFS(start) {
+    let queue = [start];
+    visited[start] = true;
+    while (queue.length > 0) {
+        let a = queue.shift();
+        for (let i = 0; i < tree[a].length; i++) {
+            if (!visited[tree[a][i] - 1]) {
+                visited[tree[a][i] - 1] = true;
+                queue.push(tree[a][i] - 1);
+                count++;
+            }
 
-function Divid(arr, level) {
-    let center = Math.floor(arr.length / 2);
-    if (arr.length === 1) {
-        answer[level].push(arr[0])
-        return;
+        }
     }
-    answer[level].push(arr[center]);
-
-    let left = arr.slice(0, center);
-    let right = arr.slice(center + 1, arr.length);
-    Divid(left, level + 1);
-    Divid(right, level + 1);
-
 }
 
-Divid(trees, 0);
-console.log(answer.map(v => v.join(' ')).join('\n'));
+BFS(0);
+
+console.log(count);
