@@ -34,5 +34,5 @@ if (counter % 2 === 1) {
 }else{
     console.log('No');
 }
-console.log(visited);
+console.log(visited);1
 console.log(tree)
