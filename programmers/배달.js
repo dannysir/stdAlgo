@@ -10,6 +10,7 @@ road.forEach((value) => {
 
 const minimumCost = Array(N + 1).fill(Number.MAX_SAFE_INTEGER);
 minimumCost[1] = 0;
+
 let queue = [{to: 1, cost: 0}];
 while (queue.length) {
     let now =  queue.shift();
@@ -21,3 +22,5 @@ while (queue.length) {
     })
 }
 console.log(minimumCost.filter(a => a <= k).length);
+console.log(connection);
+console.log(minimumCost);
