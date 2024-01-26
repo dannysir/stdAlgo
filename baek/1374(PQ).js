@@ -139,6 +139,7 @@ class MinHeap {
         } else {
             return null;
         }
+
         return min;
     }
 }
