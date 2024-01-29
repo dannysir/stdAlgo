@@ -1,47 +1,47 @@
 let fs = require("fs");
-let input = fs.readFileSync("./input.text").toString().trim().split("\n");
-let n = input.shift().split(" ").map(Number);
-let trees = new Array(n[0]).fill( ).map(_ => []);
-for (let i = 0; i < input.length; i++) {
-    let node = input[i].split(" ");
-    trees[node[0] - 1].push(parseInt(node[1]));
-    trees[node[1] - 1].push(parseInt(node[0]));
+let input = fs.readFileSync('/dev/stdin').toString().trim().split("\n");
+let [N, Bridge, Start] = input.shift().split(" ").map(Number);
+let trees = new Array(N).fill(0).map(_ => []);
+trees.forEach(v => v.sort((a, b) => a - b));
+for (let i = 0; i < Bridge; i++) {
+    let node = input[i].split(" ").map(Number);
+    trees[node[0] - 1].push(node[1]);
+    trees[node[1] - 1].push(node[0]);
 }
 trees.forEach(v => v.sort((a, b) => a - b));
-let dfsVisited = new Array(n[0]).fill(false);
-dfsVisited[0] = true;
-let answerDfs = [];
-function DFS(now) {
-    if (!dfsVisited[now]) {
-        answerDfs.push(now);
-        dfsVisited[now] = true;
-    }
-    for (let i = 0; i < trees[now-1].length; i++) {
-        let next = trees[now-1][i];
-        if (dfsVisited[next]) continue;
-        DFS(next);
-    }
-}
 
-DFS(n[2]);
-let answerBfs = [];
-let bfsVisited = new Array(n[0]).fill(false);
-function BFS(start) {
-    const next = [start];
-    let a;
-    while (next.length !== 0) {
-        a = next.shift();
-        if (bfsVisited[a]) continue;
-        bfsVisited[a] = true;
-        answerBfs.push(a);
-        for (let i = 0; i < trees[a-1].length; i++) {
-            if (!bfsVisited[trees[a-1][i]]){
-                next.push(trees[a-1][i]);
+let BFSVisited = new Array(N).fill(false);
+let BfsAnswer = [];
+const BFS = (now) => {
+    let queue = [now];
+
+    while (queue.length) {
+        let Position = queue.shift();
+        if (BFSVisited[Position - 1]) continue;
+        BFSVisited[Position - 1] = true;
+        BfsAnswer.push(Position);
+        for (let i = 0; i < trees[Position - 1].length; i++) {
+            if (!BFSVisited[trees[Position - 1][i] - 1]) {
+                queue.push(trees[Position - 1][i]);
             }
         }
     }
-}
+};
+BFS(Start);
 
-BFS(n[2]);
-console.log(answerDfs.join(" "));
-console.log(answerBfs.join(" "));
+let DFSVisited = new Array(N).fill(false);
+let DfsAnswer = [];
+const DFS = (now) => {
+    if (!DFSVisited[now - 1]) {
+        DFSVisited[now - 1] = true;
+        DfsAnswer.push(now);
+    }
+    for (let i = 0; i < trees[now - 1].length; i++) {
+        if (DFSVisited[trees[now - 1][i] - 1]) continue;
+        DFS(trees[now - 1][i]);
+
+    }
+};
+
+DFS(Start);
+console.log(`${DfsAnswer.join(" ")}\n${BfsAnswer.join(" ")}`);
