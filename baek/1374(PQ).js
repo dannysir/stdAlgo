@@ -1,12 +1,5 @@
 let fs = require("fs");
 let input = fs.readFileSync("./input.text").toString().split('\n');
-let N = input.shift();
-input = input.map(v => v.split(' ').map(Number)).sort((a, b) => {
-    if (a[1] === b[1]) {
-        return a[2] - b[2];
-    }
-    return a[1] - b[1];
-});
 //let input = require("fs").readFileSync("/dev/stdin").toString().trim().split("\n");
 // class PRIORITY_QUEUE {
 //     constructor() {
@@ -70,98 +63,90 @@ input = input.map(v => v.split(' ').map(Number)).sort((a, b) => {
 //
 // CHECK_BOUNDERY(input);
 
+let N = input.shift();
+input = input.map(v => v.split(' ').map(Number)).sort((a, b) => {
+    if (a[1] === b[1]) {
+        return a[2] - b[2];
+    }
+    return a[1] - b[1];
+});
+
 class MinHeap {
     constructor() {
         this.heap = [null];
+    }
+
+    insert(item){
+        let current = this.heap.length;
+        while (current > 1) {
+            const parent = Math.floor(current / 2);
+            if (this.heap[parent] > item) {
+                this.heap[current] = this.heap[parent];
+                current = parent;
+            }else break;
+        }
+        this.heap[current] = item;
+    }
+
+    remove() {
+        let min = this.heap[1];
+        if (this.heap.length > 2) {
+            this.heap[1] = this.heap[this.heap.length - 1];
+            this.heap.splice(this.heap.length - 1);
+
+            let current = 1;
+            let leftChild = current * 2;
+            let rightChild = current * 2 + 1;
+            while (this.heap[leftChild]) {
+                let CompareItem = leftChild;
+                if (this.heap[rightChild] && this.heap[CompareItem] > this.heap[rightChild]) {
+                    CompareItem = rightChild;
+                }
+                if (this.heap[current] > this.heap[CompareItem]) {
+                    [this.heap[current], this.heap[CompareItem]] = [this.heap[CompareItem], this.heap[current]];
+                    current = CompareItem;
+                }else break;
+
+                leftChild = current * 2;
+                rightChild = current * 2 + 1;
+            }
+        }else if (this.heap.length === 2) {
+            this.heap.splice(1, 1);
+        } else {
+            return null;
+        }
+        return min;
     }
 
     getMin() {
         return this.heap[1];
     }
 
-    getSize() {
-        return this.heap.length - 1;
-    }
-
-    isEmpty() {
-        return this.heap.length < 2;
-    }
-
-    getHeap() {
+    getHeap(){
         return this.heap;
     }
-    insert(node) {
-        let current = this.heap.length;
 
-        while (current > 1) {
-            const parent = Math.floor(current / 2);
-            if (this.heap[parent] > node) {
-                this.heap[current] = this.heap[parent];
-                current = parent;
-            } else break;
-        }
-
-        this.heap[current] = node;
-    }
-
-    remove() {
-        let min = this.heap[1];
-
-        if (this.heap.length > 2) {
-            this.heap[1] = this.heap[this.heap.length - 1];
-            this.heap.splice(this.heap.length - 1);
-
-            let current = 1;
-            let leftChildIndex = current * 2;
-            let rightChildIndex = current * 2 + 1;
-
-            while (this.heap[leftChildIndex]) {
-                let childIndexToCompare = leftChildIndex;
-                if (
-                    this.heap[rightChildIndex] &&
-                    this.heap[rightChildIndex] < this.heap[childIndexToCompare]
-                )
-                    childIndexToCompare = rightChildIndex;
-
-                if (this.heap[current] > this.heap[childIndexToCompare]) {
-                    [this.heap[current], this.heap[childIndexToCompare]] = [
-                        this.heap[childIndexToCompare],
-                        this.heap[current],
-                    ];
-                    current = childIndexToCompare;
-                } else break;
-
-                leftChildIndex = current * 2;
-                rightChildIndex = current * 2 + 1;
-            }
-        } else if (this.heap.length === 2) {
-            this.heap.splice(1, 1);
-        } else {
-            return null;
-        }
-
-        return min;
+    getSize(){
+        return this.heap.length - 1;
     }
 }
 
 function CHECK_BOUNDERY(INPUT) {
     let Priority_Queue = new MinHeap();
     Priority_Queue.insert(INPUT[0][2]);
-    let max = 1;
 
-    if (INPUT.length === 1) return max;
+    if (INPUT.length === 1) return 1;
 
     for (let i = 1; i < INPUT.length; i++) {
         if (INPUT[i][1] < Priority_Queue.getMin()) {
             Priority_Queue.insert(INPUT[i][2]);
-            max++;
         }else{
             Priority_Queue.remove();
             Priority_Queue.insert(INPUT[i][2]);
         }
-        console.log(Priority_Queue.getHeap());
+
     }
-    return Math.max(Priority_Queue.getSize(), max);
+    return Priority_Queue.getSize();
 }
 
 console.log(CHECK_BOUNDERY(input));
