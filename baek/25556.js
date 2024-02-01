@@ -42,3 +42,4 @@ const solution = () => {
     return 'YES';
 };
 console.log(solution());
+

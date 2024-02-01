@@ -1,5 +1,6 @@
 let fs = require("fs");
-let input = fs.readFileSync('/dev/stdin').toString().trim().split("\n").map(Number);
+let input = fs.readFileSync("./input.text").toString().trim().split("\n").map(Number);
+//let input = require("fs").readFileSync("/dev/stdin").toString().trim().split("\n");
 let N = input.shift();
 
 class MinHeap {
