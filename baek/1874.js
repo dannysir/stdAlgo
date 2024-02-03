@@ -27,3 +27,38 @@ const Solution = (N, INPUT) => {
     return answer;
 };
 console.log(Solution(n, input));
+
+// let ArrayN = new Array(N).fill(0).map( ( Value, Index) =>{
+//     return Index + 1;
+// })
+// let Stack = [];
+// let PopList = [];
+// let answerString = '';
+//
+// while (input.length) {
+//     const TargetNum = input.shift();
+//     if (Stack[Stack.length - 1] === TargetNum){
+//         PopList.push(Stack.pop());
+//         answerString += `-\n`;
+//         continue;
+//     }
+//     if (ArrayN.length === 0) break;
+//     while (ArrayN.length) {
+//         const ShiftN = ArrayN.shift();
+//         if (ShiftN !== TargetNum) {
+//             Stack.push(ShiftN);
+//             answerString += `+\n`;
+//         }else{
+//             answerString += `+\n`;
+//             PopList.push(ShiftN);
+//             answerString += `-\n`;
+//             break;
+//         }
+//     }
+// }
+//
+// if (PopList.length === N) {
+//     console.log(answerString);
+// } else {
+//     console.log('NO');
+// }
