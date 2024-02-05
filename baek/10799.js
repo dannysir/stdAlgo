@@ -3,17 +3,17 @@ let input = fs.readFileSync("./input.text").toString().trim().split("");
 // let input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
 let stack = [];
-let isRazer = false;
+let isLaser = false;
 let answer = 0;
 for (let i = 0; i < input.length; i++) {
     if (input[i] === '(') {
         stack.push('(');
-        isRazer = true;
+        isLaser = true;
     } else {
-        if (isRazer) {
+        if (isLaser) {
             stack.pop();
             answer += stack.length;
-            isRazer = false;
+            isLaser = false;
         } else {
             stack.pop();
             answer += 1;
