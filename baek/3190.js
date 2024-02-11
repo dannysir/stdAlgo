@@ -120,46 +120,31 @@ const solution = () => {
     let collision = false;
     let dx = [1, 0, -1, 0,];
     let dy = [0, 1, 0, -1];
-    for (let i = 0; i < SnakeOrder.length; i++) {
-        let [M, Order] = SnakeOrder[i];
-        M = parseInt(M);
-        while (!collision && cnt < M) {
-            const nextX = nowX + dx[direction];
-            const nextY = nowY + dy[direction];
-            cnt++;
-            if (nextX >= N || nextY >= N || nextY < 0 || nextX < 0) {
-                return cnt;
-            }
-            if (Snake.Has(nextX, nextY)) {
-                return cnt;
-            }
-            if (map[nextX][nextY] === 0) {
-                Snake.PushFront([nextX, nextY]);
-                Snake.PopEnd();
-            } else {
-                map[nextX][nextY] = 0;
-                Snake.PushFront([nextX, nextY]);
-            }
-            nowX = nextX;
-            nowY = nextY;
-        }
-        if (Order === 'D') {
-            direction = (direction - 1 + dx.length) % dx.length;
-        } else {
-            direction = (direction + 1) % dx.length;
-        }
-
-    }
-
+    let [M, Order] = SnakeOrder[0];
+    M = parseInt(M);
     while (!collision) {
+        if (cnt === M) {
+            if (Order === 'D') {
+                direction = (direction - 1 + dx.length) % dx.length;
+            } else {
+                direction = (direction + 1) % dx.length;
+            }
+            SnakeOrder.shift();
+            if (SnakeOrder.length) {
+                [M, Order] = SnakeOrder[0];
+                M = parseInt(M);
+            }
+        }
         const nextX = nowX + dx[direction];
         const nextY = nowY + dy[direction];
         cnt++;
         if (nextX >= N || nextY >= N || nextY < 0 || nextX < 0) {
-            return cnt;
+            collision = true;
+            break;
         }
-        if (Snake.Has(nextX,nextY)) {
-            return cnt;
+        if (Snake.Has(nextX, nextY)) {
+            collision = true;
+            break;
         }
         if (map[nextX][nextY] === 0) {
             Snake.PushFront([nextX, nextY]);
@@ -168,9 +153,10 @@ const solution = () => {
             map[nextX][nextY] = 0;
             Snake.PushFront([nextX, nextY]);
         }
+
         nowX = nextX;
         nowY = nextY;
     }
-
+    return cnt;
 };
 console.log(solution());
