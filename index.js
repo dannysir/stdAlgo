@@ -2,75 +2,69 @@ let fs = require("fs");
 let input = fs.readFileSync("./input.text").toString().trim().split('\n');
 
 // let input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
-const TEST = input.shift();
-let answer = '';
-class MINHEAP {
-    constructor() {
-        this.heap = [null];
+let N = input.shift();
+let An = input.shift().split(' ').map(Number);
+const CalArr = input.shift().split(' ').map(Number);
+let MaxStack = [];
+let MinStack = [];
+const MakeMaxStack = (ARR) => {
+
+    for (let i = 0; i < ARR[1]; i++) {
+        MaxStack.push('-');
     }
-
-    Insert(item) {
-        let cur = this.heap.length;
-        while (cur > 1) {
-            const parent = Math.floor(cur / 2);
-            if (this.heap[parent] > item) {
-                this.heap[cur] = this.heap[parent];
-                cur = parent
-            }else break;
-        }
-        this.heap[cur] = item;
+    for (let i = 0; i < ARR[3]; i++) {
+        MaxStack.push('/');
     }
-
-    Pop(){
-        const PopItem = this.heap[1];
-        if (this.heap.length > 2) {
-            this.heap[1] = this.heap.pop();
-            let Current = 1;
-            let LeftChild = Current * 2;
-            let RightChild = Current * 2 + 1;
-            while (this.heap[LeftChild]) {
-                let ComparedChild = LeftChild;
-                if (this.heap[RightChild] && this.heap[LeftChild] > this.heap[RightChild]) {
-                    ComparedChild = RightChild;
-                }
-
-                if (this.heap[Current] > this.heap[ComparedChild]) {
-                    [this.heap[Current], this.heap[ComparedChild]] = [this.heap[ComparedChild], this.heap[Current]];
-                }else break;
-                Current = ComparedChild;
-                LeftChild = Current * 2;
-                RightChild = Current * 2 + 1;
-            }
-        }else if (this.heap.length === 2) {
-            this.heap.pop();
-            return PopItem;
-        } else {
-            return null;
-        }
-        return PopItem;
+    for (let i = 0; i < ARR[0]; i++) {
+        MaxStack.push('+');
     }
-
-    GetLength() {
-        return this.heap.length - 1;
+    for (let i = 0; i < ARR[2]; i++) {
+        MaxStack.push('*');
     }
-
 }
 
-while (input.length) {
-    let [N, Arr] = input.splice(0, 2);
-    Arr = Arr.split(' ').map(Number);
-    let Acc = 0;
-    const MinHeap = new MINHEAP();
-    for (const ELEMENT of Arr) {
-        MinHeap.Insert(ELEMENT);
+const MakeMinStack = (ARR) => {
+    for (let i = 0; i < ARR[0]; i++) {
+        MinStack.push('+');
     }
-    while (MinHeap.GetLength() > 1) {
-        let temp = 0;
-        temp += MinHeap.Pop();
-        temp += MinHeap.Pop();
-        MinHeap.Insert(temp);
-        Acc += temp;
+    for (let i = 0; i < ARR[3]; i++) {
+        MinStack.push('/');
     }
-    answer += `${Acc}\n`;
+    for (let i = 0; i < ARR[1]; i++) {
+        MinStack.push('-');
+    }
+    for (let i = 0; i < ARR[2]; i++) {
+        MinStack.push('*');
+    }
 }
-console.log(answer);
+
+MakeMaxStack(CalArr);
+MakeMinStack(CalArr);
+console.log(An);
+console.log(MaxStack);
+console.log(MinStack);
+
+const MathAnswer = (NumArr, OperatorArr) => {
+    let result = 0;
+    let tmp = NumArr[NumArr.length - 1];
+    for (let i = OperatorArr.length - 1; i >= 0 ; i--) {
+        if (OperatorArr[i] === '*') {
+            tmp = tmp * NumArr[i];
+        }
+        if (OperatorArr[i] === '+') {
+            result += tmp;
+            tmp = NumArr[i];
+        }
+        if (OperatorArr[i] === '/') {
+            tmp = Math.floor(NumArr[i] / tmp);
+        }
+        if (OperatorArr[i] === '-') {
+            result -= tmp;
+            tmp = NumArr[i];
+        }
+    }
+    result += tmp;
+    console.log(result);
+};
+MathAnswer(An, MaxStack);
+MathAnswer(An, MinStack);
