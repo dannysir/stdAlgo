@@ -10,7 +10,7 @@ const FindRotten = (MAP) => {
     let Queue = [];
     for (let i = 0; i < M; i++) {
         for (let j = 0; j < N; j++) {
-            if (Map[i][j] === 1) {
+            if (MAP[i][j] === 1) {
                 Queue.push([i, j]);
             }
         }
