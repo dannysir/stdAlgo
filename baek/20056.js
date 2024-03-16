@@ -32,7 +32,7 @@ const FillMap = () => {
     }
 };
 // 파이어볼 이동 후 함수.
-const PLUS = () => {
+const Divide = () => {
     for (let i = 0; i < N; i++) {
         for (let j = 0; j < N; j++) {
             // 만약 같은 곳에 파이어볼이 2개 이상일 경우
@@ -72,7 +72,7 @@ const solution = () => {
     // K번 반복
     for (let i = 0; i < K; i++) {
         FillMap();
-        PLUS();
+        Divide();
     }
     // reduce 함수를 이용해 질량을 더해줌.
     return FIREBALL.reduce((acc, cur) => {
