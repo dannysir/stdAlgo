@@ -18,8 +18,3 @@ for (let i = 0; i < input.length; i++) {
     answer += Math.max(Math.min(left, right) - input[i], 0);
 }
 console.log(answer);
-class Class {
-    constructor() {
-
-    }
-}
