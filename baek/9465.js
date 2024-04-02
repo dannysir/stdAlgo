@@ -13,7 +13,6 @@ const FindMax = () => {
         for (let j = 0; j < 2; j++) {
             const CompareJ = j === 0 ? 1 : 0;
             if (i >= 2 && Stickers[j][i - 2] !== undefined) {
-                console.log(i, j);
                 Stickers[j][i] = Math.max(Stickers[CompareJ][i - 1],Stickers[CompareJ][i - 2]) + Stickers[j][i];
                 max = Stickers[j][i] > max ? Stickers[j][i] : max;
             } else {
@@ -23,13 +22,14 @@ const FindMax = () => {
         }
 
     }
-    console.log(Stickers);
-    console.log(max);
+    return max;
 };
 
 const solution = () => {
+    let answer = [];
     for (let i = 0; i < TestCase; i++) {
-        FindMax();
+        answer.push(FindMax());
     }
+    console.log(answer.join('\n'));
 };
 solution();
