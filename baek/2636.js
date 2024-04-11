@@ -11,6 +11,7 @@ const BFS = (x, y) => {
     let idx = 0;
     let dx = [1, -1, 0, 0];
     let dy = [0, 0, 1, -1];
+    let Rotten = 0;
     while (Queue.length > idx) {
         let [X, Y] = Queue[idx];
         for (let i = 0; i < dx.length; i++) {
@@ -23,36 +24,31 @@ const BFS = (x, y) => {
                     Queue.push([NextX, NextY]);
                 }else if (Map[NextX][NextY] === 1) {
                     visited[NextX][NextY] = true;
-                    Map[NextX][NextY] = 2;
+                    Map[NextX][NextY] = 0;
+                    Rotten++;
                 }
             }
 
         }
         idx++;
     }
+    return Rotten;
 };
-const Rotten = () => {
+
+const solution = () => {
+    let timer = 0;
     let CheeseExist = 0;
     let RottenCheese = 0;
     for (let i = 0; i < N; i++) {
         for (let j = 0; j < M; j++) {
             if (Map[i][j] === 1) {
                 CheeseExist++;
-            } else if (Map[i][j] === 2) {
-                Map[i][j] = 0;
-                RottenCheese++;
             }
         }
     }
-    return [CheeseExist, RottenCheese];
-};
-
-const solution = () => {
-    let timer = 0;
-    let [CheeseExist, RottenCheese] = Rotten();
     while (CheeseExist > 0) {
-        BFS(0, 0);
-        [CheeseExist, RottenCheese] = Rotten();
+        RottenCheese = BFS(0, 0);
+        CheeseExist = CheeseExist - RottenCheese;
         timer++;
     }
     console.log(`${timer}\n${RottenCheese}`);
