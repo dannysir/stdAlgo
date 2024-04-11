@@ -3,7 +3,7 @@ let input = fs.readFileSync("./input.text").toString().trim().split("\n");
 //let input = require("fs").readFileSync("/dev/stdin").toString().trim().split("\n");
 input = input.map(v => v.split(' ').map(e => parseInt(e)));
 let zero = [];
-function findZero() {
+function Find() {
     for (let i = 0; i < input[0].length; i++) {
         for (let j = 0; j < input.length; j++) {
             if (input[i][j] == 0) {
@@ -12,24 +12,24 @@ function findZero() {
         }
     }
 }
-findZero();
+Find();
 
-function gameStart(COIN) {
-    if (COIN === zero.length) {
-        console.log(input.map(v => v.join('')).join('\n'));
+function DFS(Index) {
+    if (Index === zero.length) {
+        console.log(input.map(v => v.join(' ')).join('\n'));
         process.exit();
     }
-    let zeroX = zero[COIN][0];
-    let zeroY = zero[COIN][1];
+    let zeroX = zero[Index][0];
+    let zeroY = zero[Index][1];
     for (let i = 1; i < 10; i++) {
-        if (checkPossible(zeroX, zeroY, i)) {
+        if (Check(zeroX, zeroY, i)) {
             input[zeroX][zeroY] = i;
-            gameStart(COIN + 1);
+            DFS(Index + 1);
             input[zeroX][zeroY] = 0;
         }
     }
 }
-function checkPossible(x, y, value) {
+function Check(x, y, value) {
     for (let i = 0; i < input.length; i++) {
         if (input[i][y] === value || input[x][i] === value) return false;
     }
@@ -45,4 +45,4 @@ function checkPossible(x, y, value) {
     return true;
 }
 
-gameStart(0);
+DFS(0);
