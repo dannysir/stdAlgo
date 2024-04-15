@@ -4,20 +4,12 @@ const [n, s, a, b] = [6, 4, 5, 6];
 const Lines = {};
 
 for (const [Start, End, Cost] of fares) {
-    if (Lines[Start] === undefined) {
-        Lines[Start] = [[End, Cost]];
-    } else {
-        Lines[Start].push([End, Cost]);
-    }
-
-    if (Lines[End] === undefined) {
-        Lines[End] = [[Start, Cost]];
-    } else {
-        Lines[End].push([Start, Cost]);
-
-    }
+    if (!Lines[Start]) Lines[Start] = [];
+    if (!Lines[End]) Lines[End] = [];
+    Lines[Start].push([End, Cost]);
+    Lines[End].push([Start, Cost]); // 양방향으로 저장
 }
-console.log(Lines);
+
 class MinHeap {
     constructor() {
         this.heap = [null];
@@ -70,21 +62,22 @@ class MinHeap {
 }
 
 const Dijkstra = (now) => {
-    let Weight = new Array(n).fill(Number.MAX_SAFE_INTEGER);
+    let Weight = new Array(n).fill(Infinity);
     const Queue = new MinHeap();
-    console.log(Lines[now], now);
-    Lines[now].forEach(v => {
-        Queue.Insert(v);
-    });
+    Queue.Insert([now, 0]);
     Weight[now - 1] = 0;
     while (Queue.GetLength()) {
         const [End, Cost] = Queue.Pop();
-        if (Weight[End - 1] > Cost) {
-            Weight[End - 1] = Cost;
-            for (const [Next, NextCost] of Lines[End]) {
-                Queue.Insert([Next, NextCost + Cost]);
+        //이것 때문에 테스트 7,8이 통과가 안됨
+        if (Weight[End - 1] < Cost) continue;
+        for (const [next, nextDistance] of Lines[End]) {
+            const newDistance = Cost + nextDistance;
+            if (newDistance < Weight[next - 1]) {
+                Weight[next - 1] = newDistance;
+                Queue.Insert([next, newDistance]);
             }
         }
+
     }
     return Weight;
 };
@@ -92,9 +85,9 @@ const Dijkstra = (now) => {
 
 const EachDistance = () => {
     const FromCo = Dijkstra(s);
-    let min = Number.MAX_SAFE_INTEGER;
+    let min = FromCo[a - 1] + FromCo[b - 1];
     for (let i = 0; i < FromCo.length; i++) {
-        if (Lines[i + 1]) {
+        if (Lines[i + 1] && i !== s) {
             let total = 0;
             let distance = Dijkstra(i + 1);
             total += FromCo[i] + distance[a - 1] + distance[b - 1];
