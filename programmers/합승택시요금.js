@@ -85,9 +85,9 @@ const Dijkstra = (now) => {
 
 const EachDistance = () => {
     const FromCo = Dijkstra(s);
-    let min = FromCo[a - 1] + FromCo[b - 1];
+    let min = Infinity;
     for (let i = 0; i < FromCo.length; i++) {
-        if (Lines[i + 1] && i !== s) {
+        if (Lines[i + 1]) {
             let total = 0;
             let distance = Dijkstra(i + 1);
             total += FromCo[i] + distance[a - 1] + distance[b - 1];
