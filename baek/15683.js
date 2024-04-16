@@ -20,8 +20,7 @@ const CamOn = (X, Y, dir, map, isCheck) => {
     const Direction = [[-1, 0], [1, 0], [0, -1], [0, 1]];
     for (const MyDir of dir) {
         let [NextX, NextY] = [X + Direction[MyDir][0], Y + Direction[MyDir][1]];
-        while (true) {
-            if (NextX < 0 || NextX >= N || NextY < 0 || NextY >= M || map[NextX][NextY] === 6) break;
+        while (NextX >= 0 && NextX < N && NextY >= 0 && NextY < M && map[NextX][NextY] !== 6) {
             map[NextX][NextY] += isCheck;
             [NextX, NextY] = [NextX + Direction[MyDir][0], NextY + Direction[MyDir][1]];
         }
