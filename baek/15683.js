@@ -6,6 +6,7 @@ let Map = input.map(v => v.split(' ').map(Number));
 
 let Cameras = [];
 let answer = Infinity;
+const CHECK_VALUE = 10;
 for (let i = 0; i < N; i++) {
     for (let j = 0; j < M; j++) {
         if (Map[i][j] !== 0 && Map[i][j] !== 6) {
@@ -15,54 +16,15 @@ for (let i = 0; i < N; i++) {
     }
 }
 
-const DeepCopy = (map) => {
-    let newMap = [];
-    map.forEach(v => {
-        newMap.push([...v]);
-    });
-    return newMap;
-};
-
-const LeftCamOn = (X, Y, map) => {
-    let [NextX, NextY] = [X, Y - 1];
-    while (NextY >= 0) {
-        if (map[NextX][NextY] !== 6) {
-            map[NextX][NextY] = -1;
-            NextY--;
-        } else break;
-
-    }
-};
-
-const RightCamOn = (X, Y, map) => {
-    let [NextX, NextY] = [X, Y + 1];
-    while (NextY < M) {
-        if (map[NextX][NextY] !== 6) {
-            map[NextX][NextY] = -1;
-            NextY++;
-        } else break
-
-    }
-};
-
-const UpCamOn = (X, Y, map) => {
-    let [NextX, NextY] = [X - 1, Y];
-    while (NextX >= 0) {
-        if (map[NextX][NextY] !== 6) {
-
-            map[NextX][NextY] = -1;
-            NextX--;
-        } else break;
-    }
-};
-
-const DownCamOn = (X, Y, map) => {
-    let [NextX, NextY] = [X + 1, Y];
-    while (NextX < N) {
-        if (map[NextX][NextY] !== 6) {
-            map[NextX][NextY] = -1;
-            NextX++;
-        } else break;
+const CamOn = (X, Y, dir, map, isCheck) => {
+    const Direction = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    for (const MyDir of dir) {
+        let [NextX, NextY] = [X + Direction[MyDir][0], Y + Direction[MyDir][1]];
+        while (true) {
+            if (NextX < 0 || NextX >= N || NextY < 0 || NextY >= M || map[NextX][NextY] === 6) break;
+            map[NextX][NextY] += isCheck;
+            [NextX, NextY] = [NextX + Direction[MyDir][0], NextY + Direction[MyDir][1]];
+        }
     }
 };
 
@@ -83,86 +45,70 @@ const Combination = (Cams, Index, map) => {
         answer = Math.min(result, answer);
         return;
     }
-    let OriginalMap = DeepCopy(map);
     const [X, Y, Type] = Cams[Index];
 
     if (Type === 1) {
-        LeftCamOn(X, Y, map);
+        CamOn(X, Y, [2], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [2], map, -CHECK_VALUE);
 
-        RightCamOn(X, Y, map);
+        CamOn(X, Y, [3], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [3], map, -CHECK_VALUE);
 
-        UpCamOn(X, Y, map);
+        CamOn(X, Y, [0], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [0], map, -CHECK_VALUE);
 
-        DownCamOn(X, Y, map);
+        CamOn(X, Y, [1], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [1], map, -CHECK_VALUE);
     } else if (Type === 2) {
-        LeftCamOn(X, Y, map);
-        RightCamOn(X, Y, map);
-        Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
 
-        UpCamOn(X, Y, map);
-        DownCamOn(X, Y, map);
+        CamOn(X, Y, [2, 3], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
-    }else if (Type === 3) {
-        UpCamOn(X, Y, map);
-        RightCamOn(X, Y, map);
-        Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [2, 3], map, -CHECK_VALUE);
 
-        RightCamOn(X, Y, map);
-        DownCamOn(X, Y, map);
+        CamOn(X, Y, [0, 1], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [0, 1], map, -CHECK_VALUE);
+    } else if (Type === 3) {
+        CamOn(X, Y, [0,3], map, CHECK_VALUE);
+        Combination(Cams, Index + 1, map);
+        CamOn(X, Y, [0,3], map, -CHECK_VALUE);
 
-        DownCamOn(X, Y, map);
-        LeftCamOn(X, Y, map);
+        CamOn(X, Y, [1, 3], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [1, 3], map, -CHECK_VALUE);
 
-        LeftCamOn(X, Y, map);
-        UpCamOn(X, Y, map);
+        CamOn(X, Y, [1, 2], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
-    }else if (Type === 4) {
-        UpCamOn(X, Y, map);
-        RightCamOn(X, Y, map);
-        DownCamOn(X, Y, map);
-        Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [1, 2], map, -CHECK_VALUE);
 
-        LeftCamOn(X, Y, map);
-        RightCamOn(X, Y, map);
-        DownCamOn(X, Y, map);
+        CamOn(X, Y, [0, 2], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [0, 2], map, -CHECK_VALUE);
+    } else if (Type === 4) {
+        CamOn(X, Y, [0, 1, 3], map, CHECK_VALUE);
+        Combination(Cams, Index + 1, map);
+        CamOn(X, Y, [0, 1, 3], map, -CHECK_VALUE);
 
-        UpCamOn(X, Y, map);
-        LeftCamOn(X, Y, map);
-        DownCamOn(X, Y, map);
+        CamOn(X, Y, [1, 2, 3], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [1, 2, 3], map, -CHECK_VALUE);
 
-        UpCamOn(X, Y, map);
-        RightCamOn(X, Y, map);
-        LeftCamOn(X, Y, map);
+        CamOn(X, Y, [0, 1, 2], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [0, 1, 2], map, -CHECK_VALUE);
+
+        CamOn(X, Y, [0, 2, 3], map, CHECK_VALUE);
+        Combination(Cams, Index + 1, map);
+        CamOn(X, Y, [0, 2, 3], map, -CHECK_VALUE);
     } else {
-        UpCamOn(X, Y, map);
-        RightCamOn(X, Y, map);
-        LeftCamOn(X, Y, map);
-        DownCamOn(X, Y, map);
+        CamOn(X, Y, [0, 1, 2, 3], map, CHECK_VALUE);
         Combination(Cams, Index + 1, map);
-        map = DeepCopy(OriginalMap);
+        CamOn(X, Y, [0, 1, 2, 3], map, -CHECK_VALUE);
+
     }
 };
 Combination(Cameras, 0, Map);
