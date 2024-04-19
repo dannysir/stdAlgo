@@ -9,6 +9,7 @@ const DFS = (StartX, StartY, EndX, EndY) => {
         answer++;
         return;
     }
+    // 가로 일 때,
     if (StartX === EndX && StartY < EndY) {
         if (EndY + 1 < N && map[EndX][EndY + 1] !== 1) {
             DFS(EndX, EndY, EndX, EndY + 1);
@@ -16,6 +17,7 @@ const DFS = (StartX, StartY, EndX, EndY) => {
         if (EndY + 1 < N && EndX + 1 < N && map[EndX][EndY + 1] !== 1 && map[EndX + 1][EndY + 1] !== 1 && map[EndX + 1][EndY] !== 1) {
             DFS(EndX, EndY, EndX + 1, EndY + 1);
         }
+    // 세로 일 때,
     }else if (StartX < EndX && StartY === EndY) {
         if (EndX + 1 < N && map[EndX + 1][EndY] !== 1) {
             DFS(EndX, EndY, EndX + 1, EndY);
@@ -23,6 +25,7 @@ const DFS = (StartX, StartY, EndX, EndY) => {
         if (EndY + 1 < N && EndX + 1 < N && map[EndX][EndY + 1] !== 1 && map[EndX + 1][EndY + 1] !== 1 && map[EndX + 1][EndY] !== 1) {
             DFS(EndX, EndY, EndX + 1, EndY + 1);
         }
+    // 대각선 일 때,
     } else {
         if (EndX + 1 < N && map[EndX + 1][EndY] !== 1) {
             DFS(EndX, EndY, EndX + 1, EndY);
