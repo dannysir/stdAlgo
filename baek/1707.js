@@ -3,7 +3,7 @@ let input = fs.readFileSync("./input.text").toString().trim().split("\n");
 //let input = require("fs").readFileSync(0, 'utf-8').toString().trim().split("\n");
 const TESTCASE = parseInt(input.shift());
 
-const Check = (start, linesOBJ, visited) => {
+const BFS = (start, linesOBJ, visited) => {
     let Queue = [start];
     visited[start] = 1;
     let idx = 0;
@@ -42,7 +42,7 @@ const solution = () => {
         let result = true;
         for (let i = 1; i <= n; i++) {
             if (visited[i] === 0) {
-                if (!Check(i, graph, visited)) {
+                if (!BFS(i, graph, visited)) {
                     result = false;
                     break;
                 }
