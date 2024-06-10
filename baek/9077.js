@@ -10,7 +10,6 @@ const solution = () => {
     for (let i = 0; i < TESTCASE; i++) {
         const N = parseInt(input.shift());
         let points = input.splice(0, N).map(v => v.split(' ').map(Number));
-
         points.forEach((point) => {
             const [X, Y] = point;
             for (let i = X; i <= X + 10; i++) {
