@@ -21,41 +21,46 @@ for (let i = 0; i < seller.length; i++) {
     }
 }
 console.log(enroll.map(v => member.get(v).budget));
-// 1차 제출
+// // 1차 제출
+// // 각자 얻은 돈.
 // let wallet = Array.from({length: enroll.length}, _ => 0);
 // for (let i = 0; i < seller.length; i++) {
+//     // 현재 이익을 본 사람의 이름.
 //     const Name = seller[i];
+//     // 판매금.
 //     const Sell = amount[i] * 100;
+//     // 현재 이익을 본 사람의 enroll 에서의 인덱스 값.
 //     let SellerIndex = 0;
+//     // indexOf() 대신 추가한 부분.
 //     for (let j = 0; j < enroll.length; j++) {
 //         if (enroll[j] === Name) {
 //             SellerIndex = j;
 //             break;
 //         }
 //     }
+//     // 추천인에게 줄 돈.
 //     let tax = Math.floor(Sell / 10);
+//     // 판매자가 가질 돈.
 //     wallet[SellerIndex] += Sell - tax;
-//
+//     // 추천인.
 //     let parent = referral[SellerIndex];
-//     while (true) {
-//
-//         if (parent === "-") {
-//             break;
-//         } else {
-//             let tmp = tax - Math.floor(tax * 0.1);
-//             for (let j = 0; j < enroll.length; j++) {
-//                 if (enroll[j] === parent) {
-//                     SellerIndex = j;
-//                     break;
-//                 }
-//             }
-//             wallet[SellerIndex] += tmp;
-//             parent = referral[SellerIndex];
-//             tax = Math.floor(tax * 0.1);
-//             if (tax < 1) {
+//     // 추천인을 하나씩 찾아 올라갈 반복문.
+//     while (parent !== '-' && tax) {
+//         // 내가 가질 금액
+//         let tmp = tax - Math.floor(tax * 0.1);
+//         // 추가한 부분.
+//         for (let j = 0; j < enroll.length; j++) {
+//             if (enroll[j] === parent) {
+//                 SellerIndex = j;
 //                 break;
 //             }
 //         }
+//         // 내가 가진 금액에 추가.
+//         wallet[SellerIndex] += tmp;
+//         // 내 추천인
+//         parent = referral[SellerIndex];
+//         // 내가 추천인에게 줄 돈.
+//         tax = Math.floor(tax * 0.1);
 //     }
 // }
 // console.log(wallet);
