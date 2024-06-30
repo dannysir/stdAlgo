@@ -1,24 +1,44 @@
-let fs = require("fs");
-let input = fs.readFileSync("./input.text").toString().trim().split("\n");
-// let input = require("fs").readFileSync(0, 'utf-8').toString().trim().split("\n");
-const N = parseInt(input.shift());
-const distance = input[0].split(' ').map(Number);
-const costs = input[1].split(' ').map(Number);
+// let fs = require("fs");
+// let input = fs.readFileSync("./input.text").toString().trim().split("\n");
+// // let input = require("fs").readFileSync(0, 'utf-8').toString().trim().split("\n");
 
-let tank = BigInt(0);
-let answer = BigInt(0);
-for (let i = 0; i < costs.length - 1; i++) {
-    if (tank >= distance[i]) continue;
+// const readline = require("readline");
+// const rl = readline.createInterface({
+//     input: process.stdin,
+//     output: process.stdout,
+// });
+// let hello = [];
+// let N = -1;
+// rl.on("line", function (line) {
+//     if (N === -1) {
+//         N = line;
+//         return;
+//     }
+//     hello.push(line);
+//     N--;
+//     if (N === 0) rl.close();
+// }).on("close", function () {
+//     console.log(hello);
+//     process.exit();
+// });
 
+const readline = require("readline");
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
 
-    let tmp = BigInt(distance[i]);
-    for (let j = i + 1; j < costs.length - 1; j++) {
-        if (costs[j] < costs[i]) break;
-
-        tmp += BigInt(distance[j]);
+let N = -1;
+let input = [];
+rl.on("line", function (line) {
+    if (N === -1) {
+        N = line;
+        return;
     }
-    tank += tmp;
-    answer += tmp * BigInt(costs[i]);
-
-}
-console.log(String(answer));
+    input.push(line.split(",").map(Number));
+    N--;
+    if (N ===0) rl.close();
+}).on("close", function () {
+    console.log(input);
+    process.exit();
+})
