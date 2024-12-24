@@ -2,43 +2,44 @@
 // let input = fs.readFileSync("./input.text").toString().trim().split("\n");
 // // let input = require("fs").readFileSync(0, 'utf-8').toString().trim().split("\n");
 
-// const readline = require("readline");
-// const rl = readline.createInterface({
-//     input: process.stdin,
-//     output: process.stdout,
-// });
-// let hello = [];
-// let N = -1;
-// rl.on("line", function (line) {
-//     if (N === -1) {
-//         N = line;
-//         return;
-//     }
-//     hello.push(line);
-//     N--;
-//     if (N === 0) rl.close();
-// }).on("close", function () {
-//     console.log(hello);
-//     process.exit();
-// });
+const points = [[3, 2], [6, 4], [4, 7], [1, 4]];
+const routes = [[4, 2], [1, 3], [2, 4]];
+const map = Array.from({length: 10}, _ => Array(10).fill(0));
+let answer = 0;
 
-const readline = require("readline");
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
+const check  = (start, end) =>{
+    const [sx, sy] = start;
+    const [ex, ey] = end;
+    let [nx, ny] = start;
 
-let N = -1;
-let input = [];
-rl.on("line", function (line) {
-    if (N === -1) {
-        N = line;
-        return;
+    while (nx !== ex) {
+        if (ex - sx > 0) {
+            map[nx + 1][ny] += 1;
+            nx += 1;
+        }else {
+            map[nx - 1][ny] += 1;
+            nx -= 1;
+        }
     }
-    input.push(line.split(",").map(Number));
-    N--;
-    if (N ===0) rl.close();
-}).on("close", function () {
-    console.log(input);
-    process.exit();
-})
+
+    while (ny !== ey) {
+        if (ey - sy > 0) {
+            map[nx][ny + 1] += 1;
+            ny += 1;
+        }else {
+            map[nx][ny - 1] += 1;
+            ny -= 1;
+        }
+    }
+}
+const init = () => {
+    routes.forEach((route, index) => {
+        for (let i = 0; i < route.length - 1; i++) {
+            const start = points[route[i] - 1];
+            const end = points[route[i + 1] - 1];
+            check(start, end);
+        }
+    })
+};
+init();
+console.log(map);
