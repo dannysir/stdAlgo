@@ -27,22 +27,19 @@ let N = Number(input[0]);
 // }
 // console.log(answer);
 
-function starPrint(n) {
-    if(n === 1) return ['*']
+const recursion = (n) => {
+    if (n === 1) return ['*'];
 
-    let star = starPrint(n / 3)
-    let starList = []
+    const star = recursion(n / 3);
+    let answer = [];
 
-    // 상
-    starList = starList.concat(...star.map((v) => v + v + v))
+    answer = answer.concat(...star.map(v => v + v + v));
 
-    // 중간 (여기서 공백이 발생하기 때문에 push)
-    starList.push(...star.map((v) => v + ' '.repeat(star.length) + v))
+    answer.push(...star.map(v => v + ' '.repeat(star.length) + v));
 
-    // 하
-    starList = starList.concat(...star.map((v) => v + v + v))
+    answer = answer.concat(...star.map(v => v + v + v));
 
-    return starList
-}
+    return answer;
+};
 
-console.log(starPrint(Number(N)).join('\n'))
+console.log(recursion(N).join('\n'));
