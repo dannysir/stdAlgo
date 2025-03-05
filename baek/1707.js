@@ -1,23 +1,24 @@
 let fs = require("fs");
 let input = fs.readFileSync("./input.text").toString().trim().split("\n");
-//let input = require("fs").readFileSync(0, 'utf-8').toString().trim().split("\n");
-const TESTCASE = parseInt(input.shift());
+// let input = require("fs").readFileSync(0, 'utf-8').toString().trim().split("\n");
+const tc = Number(input.shift());
 
-const BFS = (start, linesOBJ, visited) => {
-    let Queue = [start];
-    visited[start] = 1;
+const check = (trees, n, visited) => {
+    const queue = [n];
+    visited[n] = 1;
     let idx = 0;
-    while (Queue.length > idx) {
-        const NOW = Queue[idx];
-        const POSITION = visited[NOW];
-        const OtherPos = POSITION === 1 ? -1 : 1;
-        for (const NEXT of linesOBJ[NOW]) {
-            if (visited[NEXT] === POSITION) {
+    while (idx < queue.length) {
+        const now = queue[idx];
+        const myTeam = visited[now];
+        const otherTeam = myTeam === 1 ? -1 : 1;
+        for (const next of trees[now]) {
+
+            if (visited[next] === myTeam) {
                 return false;
             }
-            if (visited[NEXT] === 0) {
-                Queue.push(NEXT);
-                visited[NEXT] = OtherPos;
+            if (visited[next] === 0) {
+                visited[next] = otherTeam;
+                queue.push(next);
             }
         }
         idx++;
@@ -26,31 +27,31 @@ const BFS = (start, linesOBJ, visited) => {
 };
 
 const solution = () => {
-    let answer = [];
-    let index = 0;
-    for (let i = 0; i < TESTCASE; i++) {
-        const [n, l] = input[index++].split(' ').map(Number);
-        const graph = Array.from({ length: n + 1 }, () => []);
-        let visited = new Array(n + 1).fill(0);
+    let result = [];
+    for (let i = 0; i < tc; i++) {
+        const [v, e] = input.shift().split(' ').map(Number);
+        const inputLines = input.splice(0, e).map(v => v.split(' ').map(Number));
+        const trees = Array.from({length: v + 1}, _ => []);
+        inputLines.forEach(v => {
+            const [start, end] = v;
+            trees[start].push(end);
+            trees[end].push(start);
+        });
 
-        for (let i = 0; i < l; i++) {
-            const [start, end] = input[index++].split(' ').map(Number);
-            graph[start].push(end);
-            graph[end].push(start);
-        }
-
-        let result = true;
-        for (let i = 1; i <= n; i++) {
-            if (visited[i] === 0) {
-                if (!BFS(i, graph, visited)) {
-                    result = false;
+        const visited = Array(v + 1).fill(0);
+        let answer = true;
+        for (let j = 1; j < v + 1; j++) {
+            if (visited[j] === 0) {
+                if (!check(trees, j, visited)) {
+                    answer = false;
                     break;
                 }
             }
         }
-        answer.push(result ? 'YES' : 'NO');
+        result.push(answer ? 'YES' : 'NO');
+
     }
-    console.log(answer.join('\n'));
+    console.log(result.join('\n'));
 };
 
 solution();
