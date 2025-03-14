@@ -1,0 +1,13 @@
+let A = [
+    key : value
+        ...
+];
+
+let B = [
+    ...
+];
+
+// c는 a,b를 합치는 객체
+let c = B.map((value, index) => {
+    A.find(value)?
+});
