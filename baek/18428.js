@@ -67,7 +67,7 @@ const check = (x, y, boards) => {
 const solution = (objArr, boards) => {
     // 현재 boards 상태 복사
     const boardsCopy = boards.map(row => [...row]);
-
+킹
     // 장애물 설치
     objArr.forEach(position => {
         const [x, y] = position;
