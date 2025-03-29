@@ -10,17 +10,21 @@ let right = 0;
 let sum = input[left];
 let answer = Infinity;
 
-while (left <= right) {
-    if (sum === S) {
+while (left < N) {
+    if (sum >= S) {
+        // S 이상이면 길이 업데이트하고 left 증가
         answer = Math.min(right - left + 1, answer);
-        right++;
-        break;
-    }else if (sum > S) {
-        sum -= input[left]
+        sum -= input[left];
         left++;
-    }else if (sum < S) {
+    } else if (right < N - 1) {
+        // 합이 S보다 작고 right를 증가시킬 수 있으면
         right++;
         sum += input[right];
+    } else {
+        // 합이 S보다 작고 right를 더 이상 증가시킬 수 없으면
+        sum -= input[left];
+        left++;
     }
 }
+
 console.log(answer === Infinity ? 0 : answer);
