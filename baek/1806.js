@@ -1,24 +1,26 @@
 let fs = require("fs");
 let input = fs.readFileSync("./input.text").toString().trim().split('\n');
+// let input = require("fs").readFileSync(0, 'utf-8').toString().trim().split('\n');
 
-// let input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const [N, S] = input.shift().split(' ').map(v => +v);
+input = input[0].split(' ').map(v => +v);
 
-let [N, S] = input.shift().split(' ').map(Number);
-input = input.shift().split(' ').map(Number);
-let InputNum = new Array(input.length + 1).fill(0);
+let left = 0;
+let right = 0;
+let sum = input[left];
+let answer = Infinity;
 
-let min = input.length + 3;
-for (let i = 0; i < input.length; i++) {
-    InputNum[i + 1] += InputNum[i] + input[i];
-}
-for (let i = InputNum.length - 1; i > 0; i--) {
-    for (let j = i - 1; j >= 0; j--) {
-        if (InputNum[i] - InputNum[j] >= S) {
-            if (i - j < min) min = i - j;
-            break;
-        }
+while (left <= right) {
+    if (sum === S) {
+        answer = Math.min(right - left + 1, answer);
+        right++;
+        break;
+    }else if (sum > S) {
+        sum -= input[left]
+        left++;
+    }else if (sum < S) {
+        right++;
+        sum += input[right];
     }
 }
-min = min === input.length + 3 ? 0 : min;
-console.log(min);
-
+console.log(answer === Infinity ? 0 : answer);
