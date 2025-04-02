@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>원형 커서 효과</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            cursor: none; /* 기본 커서 숨기기 */
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        h1, p {
+            position: relative;
+            z-index: 1; /* 텍스트가 커서 위에 보이도록 설정 */
+        }
+
+        /* 커스텀 커서 스타일 */
+        .cursor {
+            position: fixed;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            pointer-events: none;
+            background-color: white; /* 불투명한 흰색으로 변경 */
+            mix-blend-mode: difference; /* 배경과 색상 반전 효과 */
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+
+        /* 마우스 위치에 따른 색상 효과를 위한 요소들 */
+        .content-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-block {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .red-bg {
+            background-color: #ff5252;
+            color: white;
+        }
+
+        .blue-bg {
+            background-color: #4a6ee0;
+            color: white;
+        }
+
+        .green-bg {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .yellow-bg {
+            background-color: #ffc107;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<!-- 커스텀 커서 요소 -->
+<div class="cursor"></div>
+
+<div class="container">
+    <h1>원형 커서 효과 데모</h1>
+    <p>이 페이지에서는 커스텀 원형 커서가 배경과 텍스트 색상에 영향을 주는 효과를 보여줍니다. 커서를 움직여 다양한 색상 위에서 어떻게 효과가 나타나는지 확인해보세요.</p>
+
+    <div class="content-section">
+        <div class="color-block red-bg">빨간 배경</div>
+        <div class="color-block blue-bg">파란 배경</div>
+        <div class="color-block green-bg">초록 배경</div>
+        <div class="color-block yellow-bg">노란 배경</div>
+    </div>
+
+    <div class="content-section">
+        <h2>이 효과는 어떻게 작동하나요?</h2>
+        <p>이 효과는 CSS의 mix-blend-mode 속성을 사용하여 커서가 지나가는 영역의 색상을 반전시킵니다. 또한 JavaScript를 사용하여 마우스 움직임에 따라 원형 커서가 움직이도록 구현했습니다.</p>
+        <p>텍스트 위에 커서를 올려보세요. 텍스트 색상이 어떻게 변하는지 확인할 수 있습니다.</p>
+    </div>
+</div>
+
+<script>
+    // 커스텀 커서 요소 선택
+    const cursor = document.querySelector('.cursor');
+
+    // 마우스 움직임에 따라 커서 위치 업데이트
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    });
+
+    // 마우스가 페이지를 벗어났을 때 커서 숨기기
+    document.addEventListener('mouseout', () => {
+        cursor.style.opacity = '0';
+    });
+
+    // 마우스가 페이지로 돌아왔을 때 커서 표시
+    document.addEventListener('mouseover', () => {
+        cursor.style.opacity = '1';
+    });
+
+    // 클릭할 때 커서 크기 축소 효과
+    document.addEventListener('mousedown', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(0.8)';
+    });
+
+    // 클릭 해제할 때 커서 크기 복원
+    document.addEventListener('mouseup', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+    });
+</script>
+</body>
+</html>
