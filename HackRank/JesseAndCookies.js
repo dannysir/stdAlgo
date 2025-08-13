@@ -87,5 +87,5 @@ function cookies(k, A) {
         return -1;
     }
 }
-
+//test
 console.log(cookies(k, arr));
