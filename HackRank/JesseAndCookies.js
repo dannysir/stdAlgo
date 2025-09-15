@@ -1,5 +1,5 @@
 let fs = require("fs");
-let input = fs.readFileSync("./input.txt").toString().trim().split("\n");
+let input = fs.readFileSync("./input.text").toString().trim().split("\n");
 // let input = require("fs").readFileSync(0, 'utf-8').toString().trim().split("\n");
 
 const [n, k] = input.shift().split(' ').map(v => +v);

@@ -1,5 +1,5 @@
 let fs = require("fs");
-let input = fs.readFileSync("./input.txt").toString().trim().split("\n");
+let input = fs.readFileSync("./input.text").toString().trim().split("\n");
 const TC = +input.shift();
 
 const checkRow = (n, m, boards) => {
