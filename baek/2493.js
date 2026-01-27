@@ -1,29 +1,60 @@
-let fs = require("fs");
-let input = fs.readFileSync("./input.text").toString().trim().split("\n");
+let fs = require('fs');
+let input = fs.readFileSync('./input.text').toString().trim().split('\n');
 // let input = require("fs").readFileSync(0, 'utf-8').toString().trim().split("\n");
-const N = Number(input.shift());
-input = input.shift().split(' ').map(Number);
 
-const stack = [];
-const answer = [];
+const N = +input.shift();
+input = input[0].split(' ').map(Number);
 
-for (let i = 0; i < N; i++) {
-    if (stack.length !== 0) {
-        while (stack.length > 0) {
-            if (input[stack[stack.length - 1]] <= input[i]) {
-                stack.pop();
-            } else break;
-        }
+const solution = (N, towers) => {
+  const stack = [];
+  const answer = [];
+
+  for (let i = 0; i < towers.length; i++) {
+    while (stack.length) {
+      if (stack[stack.length - 1][0] < towers[i]) {
+        stack.pop();
+      } else break;
     }
 
-    stack.push(i);
-    if (stack.length === 1) {
-        answer.push(0);
-    } else {
-        answer.push(stack[stack.length - 2] + 1);
-    }
-}
-console.log(answer.join(' '));
+    if (stack.length) {
+      answer.push(stack[stack.length - 1][1]);
+    } else answer.push(0);
+    stack.push([towers[i], i + 1]);
+  }
+
+  console.log(answer.join(' '));
+};
+
+solution(N, input);
+
+
+
+// let fs = require("fs");
+// let input = fs.readFileSync("./input.text").toString().trim().split("\n");
+// // let input = require("fs").readFileSync(0, 'utf-8').toString().trim().split("\n");
+// const N = Number(input.shift());
+// input = input.shift().split(' ').map(Number);
+//
+// const stack = [];
+// const answer = [];
+//
+// for (let i = 0; i < N; i++) {
+//     if (stack.length !== 0) {
+//         while (stack.length > 0) {
+//             if (input[stack[stack.length - 1]] <= input[i]) {
+//                 stack.pop();
+//             } else break;
+//         }
+//     }
+//
+//     stack.push(i);
+//     if (stack.length === 1) {
+//         answer.push(0);
+//     } else {
+//         answer.push(stack[stack.length - 2] + 1);
+//     }
+// }
+// console.log(answer.join(' '));
 // let fs = require("fs");
 // let input = fs.readFileSync("./input.text").toString().trim().split("\n");
 // // let input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
