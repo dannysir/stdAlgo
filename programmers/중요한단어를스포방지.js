@@ -6,7 +6,10 @@ const buildWordBoundary = (message) => {
   const boundary = Array(message.length).fill(null);
   let i = 0;
   while (i < message.length) {
-    if (message[i] === ' ') { i++; continue; }
+    if (message[i] === ' ') {
+      i++;
+      continue;
+    }
     let j = i;
     while (j < message.length && message[j] !== ' ') j++;
     // i ~ j-1 이 하나의 단어
@@ -28,7 +31,10 @@ const getNonSpoilerWords = (message, spoiler_ranges) => {
 
   let i = 0;
   while (i < message.length) {
-    if (message[i] === ' ') { i++; continue; }
+    if (message[i] === ' ') {
+      i++;
+      continue;
+    }
     let j = i;
     while (j < message.length && message[j] !== ' ') j++;
     const isSpoiler = [...Array(j - i).keys()].some(k => spoilerSet.has(i + k));
